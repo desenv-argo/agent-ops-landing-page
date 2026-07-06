@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AgentOps — Crie sua própria fábrica de software com agentes de IA</title>
+  <meta name="description" content="O AgentOps conecta no seu código, entende demandas, orquestra agentes especializados e transforma requisitos em análise, arquitetura, implementação, testes e pull requests." />
+  <meta property="og:title" content="AgentOps — Fábrica de software com agentes de IA" />
+  <meta property="og:description" content="Uma demanda entra. Um Pull Request sai. Código-fonte em evolução para builders." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: #08070f; color: #f2f1f8; font-family: 'IBM Plex Sans', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    @keyframes pulseGlow { 0%,100% { opacity: .35; } 50% { opacity: .85; } }
+    @keyframes flowline { to { background-position: -200% 0; } }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .15; } }
+    .faq-answer { display: none; }
+    .faq-item.open .faq-answer { display: block; }
+    .faq-item .icon-minus { display: none; }
+    .faq-item.open .icon-minus { display: inline; }
+    .faq-item.open .icon-plus { display: none; }
+  </style>
+
+  <!-- ============================================================
+       ANALYTICS — cole aqui seus códigos de rastreamento.
+       Mesmo com tráfego orgânico, vale medir quantos chegam x clicam no botão de compra.
+       Ex.: Google Analytics 4 (GA4) e/ou Meta Pixel.
+       <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+       <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXX');</script>
+  ============================================================ -->
+</head>
+<body>
+
+<div id="topo" style="position:relative;background:#08070f;">
+
+  <!-- ambient orbs -->
+  <div style="position:absolute;top:-120px;left:-80px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle, rgba(91,140,255,0.22), transparent 65%);filter:blur(20px);pointer-events:none;animation:pulseGlow 9s ease-in-out infinite;"></div>
+  <div style="position:absolute;top:480px;right:-120px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle, rgba(160,107,255,0.18), transparent 65%);filter:blur(20px);pointer-events:none;animation:pulseGlow 11s ease-in-out infinite;"></div>
+
+  <!-- ============ NAV ============ -->
+  <nav style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px clamp(18px,4vw,48px);background:rgba(8,7,15,0.72);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07);">
+    <a href="#topo" style="display:flex;align-items:center;gap:11px;text-decoration:none;">
+      <img src="assets/athlas-logo.png" alt="Athlas" style="height:36px;width:auto;filter:drop-shadow(0 4px 14px rgba(91,140,255,.55));" />
+      <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:#f2f1f8;letter-spacing:-0.01em;">Agent<span style="color:#7d9bff;">Ops</span></span>
+    </a>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="#como" style="color:#a09db5;text-decoration:none;font-size:14px;">Como funciona</a>
+      <a href="#oferta" style="text-decoration:none;padding:11px 20px;border-radius:11px;background:linear-gradient(135deg,#5b8cff,#a06bff);color:#fff;font-weight:600;font-size:14px;box-shadow:0 8px 24px -8px rgba(120,110,255,0.75);">Quero acessar</a>
+    </div>
+  </nav>
+
+  <!-- ============ HERO A ============ -->
+  <section id="heroA" data-screen-label="Hero A" style="display:none;position:relative;overflow:hidden;padding:clamp(60px,8vw,110px) clamp(20px,4vw,48px) clamp(70px,9vw,120px);">
+    <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.22;pointer-events:none;">
+      <source src="assets/argo-agentes.mp4" type="video/mp4" />
+    </video>
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%, rgba(91,140,255,0.14), transparent 60%), linear-gradient(180deg, rgba(8,7,15,0.55), rgba(8,7,15,0.92));pointer-events:none;"></div>
+
+    <div style="position:relative;max-width:1000px;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:26px;">
+      <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;border:1px solid rgba(125,155,255,0.3);background:rgba(91,140,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:0.04em;color:#aebdff;">
+        <span style="width:7px;height:7px;border-radius:50%;background:#5b8cff;box-shadow:0 0 12px #5b8cff;"></span>
+        Código-fonte em evolução para builders
+      </div>
+
+      <h1 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(38px,6.2vw,76px);line-height:1.02;letter-spacing:-0.02em;color:#f4f3fa;max-width:16ch;">
+        Tenha sua própria <span style="background:linear-gradient(110deg,#5b8cff,#a06bff 70%);-webkit-background-clip:text;background-clip:text;color:transparent;">fábrica de software com IA</span> sem construir do zero
+      </h1>
+
+      <p style="margin:0;max-width:62ch;font-size:clamp(16px,2vw,20px);line-height:1.6;color:#b6b3c9;">
+        Você recebe o <strong style="color:#e2e1ee;">código-fonte completo</strong> de uma plataforma que recebe demandas, aciona agentes (PM, arquiteto, dev, QA) e entrega Pull Requests prontos pra sua revisão. Pronto pra estudar, customizar, vender ou virar seu próprio produto.
+      </p>
+
+      <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:4px;">
+        <a href="#oferta" style="text-decoration:none;padding:16px 30px;border-radius:13px;background:linear-gradient(135deg,#5b8cff,#a06bff);color:#fff;font-weight:600;font-size:16px;box-shadow:0 14px 38px -10px rgba(120,110,255,0.8);">Quero o código-fonte — R$397</a>
+        <a href="#como" style="text-decoration:none;padding:16px 30px;border-radius:13px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.04);color:#e8e7f2;font-weight:600;font-size:16px;">Ver como funciona</a>
+      </div>
+      <p style="margin:2px 0 0;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#8d8aa3;"><span style="color:#5be0a0;">✓</span> 7 dias de garantia &nbsp;·&nbsp; <span style="color:#5be0a0;">✓</span> Pagamento único &nbsp;·&nbsp; <span style="color:#5be0a0;">✓</span> Acesso imediato</p>
+
+      <!-- pipeline flow -->
+      <div style="position:relative;width:100%;max-width:920px;margin-top:34px;padding:22px 18px;border-radius:18px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.015));backdrop-filter:blur(12px);">
+        <div style="position:absolute;left:24px;right:24px;top:50%;height:2px;background:linear-gradient(90deg,transparent,rgba(125,155,255,0.5),rgba(160,107,255,0.5),transparent);background-size:200% 100%;animation:flowline 4s linear infinite;"></div>
+        <div style="position:relative;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;">
+          <!-- pipeline items -->
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:11px;border:1px solid rgba(255,255,255,0.1);background:rgba(13,12,24,0.82);font-family:'JetBrains Mono',monospace;font-size:13px;color:#dfe0f0;white-space:nowrap;"><span style="width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);"></span>Work Item</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:11px;border:1px solid rgba(255,255,255,0.1);background:rgba(13,12,24,0.82);font-family:'JetBrains Mono',monospace;font-size:13px;color:#dfe0f0;white-space:nowrap;"><span style="width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);"></span>PM Agent</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:11px;border:1px solid rgba(255,255,255,0.1);background:rgba(13,12,24,0.82);font-family:'JetBrains Mono',monospace;font-size:13px;color:#dfe0f0;white-space:nowrap;"><span style="width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);"></span>Arquitetura</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:11px;border:1px solid rgba(255,255,255,0.1);background:rgba(13,12,24,0.82);font-family:'JetBrains Mono',monospace;font-size:13px;color:#dfe0f0;white-space:nowrap;"><span style="width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);"></span>Código</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:11px;border:1px solid rgba(255,255,255,0.1);background:rgba(13,12,24,0.82);font-family:'JetBrains Mono',monospace;font-size:13px;color:#dfe0f0;white-space:nowrap;"><span style="width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);"></span>QA</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:11px;border:1px solid rgba(255,255,255,0.1);background:rgba(13,12,24,0.82);font-family:'JetBrains Mono',monospace;font-size:13px;color:#dfe0f0;white-space:nowrap;"><span style="width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);"></span>Pull Request</div>
+        </div>
+      </div>
+
+      <p style="margin:18px 0 0;font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:0.03em;color:#6f6c85;">Next.js + FastAPI · Arquitetura modular · Humano no controle</p>
+    </div>
+  </section>
+
+  <!-- ============ HERO B ============ -->
+  <section id="heroB" data-screen-label="Hero B" style="position:relative;overflow:hidden;padding:clamp(56px,7vw,96px) clamp(20px,4vw,48px);">
+    <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.14;pointer-events:none;">
+      <source src="assets/argo-agentes.mp4" type="video/mp4" />
+    </video>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(8,7,15,0.6), rgba(8,7,15,0.94));pointer-events:none;"></div>
+
+    <div style="position:relative;max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:clamp(32px,5vw,64px);">
+      <div style="flex:1 1 420px;min-width:300px;display:flex;flex-direction:column;gap:22px;">
+        <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;border:1px solid rgba(125,155,255,0.3);background:rgba(91,140,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#aebdff;width:fit-content;">
+          <span style="width:7px;height:7px;border-radius:50%;background:#5b8cff;box-shadow:0 0 12px #5b8cff;"></span>
+          Código-fonte em evolução para builders
+        </div>
+        <h1 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(36px,5vw,62px);line-height:1.04;letter-spacing:-0.02em;color:#f4f3fa;">
+          Uma demanda entra. Um <span style="background:linear-gradient(110deg,#5b8cff,#a06bff 70%);-webkit-background-clip:text;background-clip:text;color:transparent;">Pull Request</span> sai.
+        </h1>
+        <p style="margin:0;max-width:54ch;font-size:clamp(16px,2vw,19px);line-height:1.6;color:#b6b3c9;">
+          Você recebe o <strong style="color:#e2e1ee;">código-fonte completo</strong> de uma plataforma que recebe demandas, aciona agentes (PM, arquiteto, dev, QA) e entrega Pull Requests prontos pra sua revisão. Pronto pra estudar, customizar, vender ou virar seu próprio produto.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:4px;">
+          <a href="#oferta" style="text-decoration:none;padding:16px 30px;border-radius:13px;background:linear-gradient(135deg,#5b8cff,#a06bff);color:#fff;font-weight:600;font-size:16px;box-shadow:0 14px 38px -10px rgba(120,110,255,0.8);">Quero o código-fonte — R$397</a>
+          <a href="#como" style="text-decoration:none;padding:16px 30px;border-radius:13px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.04);color:#e8e7f2;font-weight:600;font-size:16px;">Ver como funciona</a>
+        </div>
+        <p style="margin:2px 0 0;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#8d8aa3;"><span style="color:#5be0a0;">✓</span> 7 dias de garantia &nbsp;·&nbsp; <span style="color:#5be0a0;">✓</span> Pagamento único &nbsp;·&nbsp; <span style="color:#5be0a0;">✓</span> Acesso imediato</p>
+        <p style="margin:6px 0 0;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#6f6c85;">Next.js + FastAPI · Arquitetura modular · Humano no controle</p>
+      </div>
+
+      <!-- agent run mockup -->
+      <div style="flex:1 1 420px;min-width:300px;">
+        <div style="border-radius:20px;border:1px solid rgba(255,255,255,0.1);background:linear-gradient(180deg,rgba(20,18,34,0.95),rgba(12,11,22,0.95));box-shadow:0 30px 80px -30px rgba(60,40,160,0.6);overflow:hidden;animation:floaty 7s ease-in-out infinite;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02);">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#dfe0f0;">AgentRun #AR-2381</span>
+            <span style="display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#5be0a0;"><span style="width:7px;height:7px;border-radius:50%;background:#5be0a0;box-shadow:0 0 10px #5be0a0;animation:blink 1.4s infinite;"></span>em execução</span>
+          </div>
+          <div style="padding:18px;display:flex;flex-direction:column;gap:11px;">
+            <div style="display:flex;align-items:center;gap:12px;"><span style="width:18px;height:18px;border-radius:50%;background:#5b8cff;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">✓</span><span style="font-size:14px;color:#cfd0e2;">PM Analysis</span><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:#6f6c85;">concluído</span></div>
+            <div style="display:flex;align-items:center;gap:12px;"><span style="width:18px;height:18px;border-radius:50%;background:#5b8cff;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">✓</span><span style="font-size:14px;color:#cfd0e2;">Architecture</span><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:#6f6c85;">concluído</span></div>
+            <div style="display:flex;align-items:center;gap:12px;"><span style="width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;animation:blink 1.4s infinite;">●</span><span style="font-size:14px;color:#f2f1f8;font-weight:600;">Software Engineer</span><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:#a06bff;">rodando…</span></div>
+            <div style="display:flex;align-items:center;gap:12px;opacity:.5;"><span style="width:18px;height:18px;border-radius:50%;border:1px solid #6f6c85;"></span><span style="font-size:14px;color:#9a97b0;">QA Agent</span><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:#6f6c85;">na fila</span></div>
+            <div style="margin-top:6px;border-radius:11px;border:1px solid rgba(255,255,255,0.07);background:#0a0913;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.7;color:#8d8aa3;">
+              <div><span style="color:#5b8cff;">→</span> aplicando patch em <span style="color:#cfd0e2;">auth/service.py</span></div>
+              <div><span style="color:#5be0a0;">✓</span> 12 testes passando</div>
+              <div>preparando PR<span style="animation:blink 1s infinite;">▌</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;border-radius:11px;border:1px solid rgba(125,155,255,0.25);background:rgba(91,140,255,0.07);padding:11px 14px;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">PR #142</span>
+              <span style="font-size:13px;color:#cfd0e2;">feat: novo fluxo de auth</span>
+              <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:#5be0a0;">+248 −31</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DOR ============ -->
+  <section data-screen-label="Dor" style="position:relative;padding:clamp(64px,9vw,120px) clamp(20px,4vw,48px);">
+    <div style="max-width:1180px;margin:0 auto;">
+      <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#7d9bff;">A realidade hoje</p>
+      <h2 style="margin:0 0 48px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4vw,46px);line-height:1.1;letter-spacing:-0.02em;color:#f2f1f8;max-width:20ch;">Desenvolver software sozinho está ficando impossível do jeito antigo</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;">
+        <!-- PAINS -->
+        <div style="padding:26px;border-radius:18px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:10px;"><span style="width:34px;height:34px;border-radius:10px;background:rgba(255,90,90,0.12);border:1px solid rgba(255,120,120,0.25);display:flex;align-items:center;justify-content:center;color:#ff8a8a;font-size:18px;font-weight:700;">!</span><h3 style="margin:6px 0 0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:#f2f1f8;">As demandas acumulam</h3><p style="margin:0;font-size:15px;line-height:1.55;color:#a09db5;">O backlog cresce mais rápido do que um dev sozinho consegue executar.</p></div>
+        <div style="padding:26px;border-radius:18px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:10px;"><span style="width:34px;height:34px;border-radius:10px;background:rgba(255,90,90,0.12);border:1px solid rgba(255,120,120,0.25);display:flex;align-items:center;justify-content:center;color:#ff8a8a;font-size:18px;font-weight:700;">!</span><h3 style="margin:6px 0 0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:#f2f1f8;">Legado exige contexto</h3><p style="margin:0;font-size:15px;line-height:1.55;color:#a09db5;">Sistemas antigos pedem contexto que se perde entre uma tarefa e outra.</p></div>
+        <div style="padding:26px;border-radius:18px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:10px;"><span style="width:34px;height:34px;border-radius:10px;background:rgba(255,90,90,0.12);border:1px solid rgba(255,120,120,0.25);display:flex;align-items:center;justify-content:center;color:#ff8a8a;font-size:18px;font-weight:700;">!</span><h3 style="margin:6px 0 0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:#f2f1f8;">Cada feature é um ciclo inteiro</h3><p style="margin:0;font-size:15px;line-height:1.55;color:#a09db5;">Análise, arquitetura, código, teste, PR e revisão — tudo na sua conta.</p></div>
+        <div style="padding:26px;border-radius:18px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:10px;"><span style="width:34px;height:34px;border-radius:10px;background:rgba(255,90,90,0.12);border:1px solid rgba(255,120,120,0.25);display:flex;align-items:center;justify-content:center;color:#ff8a8a;font-size:18px;font-weight:700;">!</span><h3 style="margin:6px 0 0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:#f2f1f8;">Tempo operacional drena freelancers</h3><p style="margin:0;font-size:15px;line-height:1.55;color:#a09db5;">Devs independentes afogam em trabalho repetitivo em vez de entregar valor.</p></div>
+        <div style="padding:26px;border-radius:18px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:10px;"><span style="width:34px;height:34px;border-radius:10px;background:rgba(255,90,90,0.12);border:1px solid rgba(255,120,120,0.25);display:flex;align-items:center;justify-content:center;color:#ff8a8a;font-size:18px;font-weight:700;">!</span><h3 style="margin:6px 0 0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:#f2f1f8;">IA solta não orquestra</h3><p style="margin:0;font-size:15px;line-height:1.55;color:#a09db5;">Ferramentas de IA ajudam em pedaços, mas ninguém costura o fluxo de ponta a ponta.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GRANDE PROMESSA ============ -->
+  <section data-screen-label="Promessa" style="position:relative;padding:clamp(64px,9vw,120px) clamp(20px,4vw,48px);background:linear-gradient(180deg,#08070f,#0d0b1a);border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);">
+    <div style="max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:clamp(36px,5vw,64px);align-items:center;">
+      <div style="flex:1 1 380px;min-width:300px;">
+        <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#7d9bff;">A virada</p>
+        <h2 style="margin:0 0 28px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4vw,44px);line-height:1.1;letter-spacing:-0.02em;color:#f2f1f8;">AgentOps transforma uma demanda em um fluxo de engenharia operado por agentes</h2>
+        <div style="display:flex;flex-direction:column;gap:13px;">
+          <div style="display:flex;align-items:flex-start;gap:14px;"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;margin-top:1px;">✓</span><div><span style="font-weight:600;color:#f2f1f8;font-size:16px;">Recebe work items</span><span style="color:#8d8aa3;font-size:15px;"> — Demandas técnicas entram por webhook ou API.</span></div></div>
+          <div style="display:flex;align-items:flex-start;gap:14px;"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;margin-top:1px;">✓</span><div><span style="font-weight:600;color:#f2f1f8;font-size:16px;">Cria execuções rastreáveis</span><span style="color:#8d8aa3;font-size:15px;"> — Cada demanda vira um Agent Run com estado e histórico.</span></div></div>
+          <div style="display:flex;align-items:flex-start;gap:14px;"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;margin-top:1px;">✓</span><div><span style="font-weight:600;color:#f2f1f8;font-size:16px;">Aciona agentes especializados</span><span style="color:#8d8aa3;font-size:15px;"> — PM, Arquiteto, Engenheiro, QA e Review por fase.</span></div></div>
+          <div style="display:flex;align-items:flex-start;gap:14px;"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;margin-top:1px;">✓</span><div><span style="font-weight:600;color:#f2f1f8;font-size:16px;">Trabalha sobre repos reais</span><span style="color:#8d8aa3;font-size:15px;"> — Atua sobre código existente, não sobre exemplos.</span></div></div>
+          <div style="display:flex;align-items:flex-start;gap:14px;"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;margin-top:1px;">✓</span><div><span style="font-weight:600;color:#f2f1f8;font-size:16px;">Gera fases, logs e evidências</span><span style="color:#8d8aa3;font-size:15px;"> — Tudo registrado e auditável do início ao fim.</span></div></div>
+          <div style="display:flex;align-items:flex-start;gap:14px;"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;margin-top:1px;">✓</span><div><span style="font-weight:600;color:#f2f1f8;font-size:16px;">Prepara Pull Requests</span><span style="color:#8d8aa3;font-size:15px;"> — Branches e PRs prontos para a sua revisão.</span></div></div>
+          <div style="display:flex;align-items:flex-start;gap:14px;"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;margin-top:1px;">✓</span><div><span style="font-weight:600;color:#f2f1f8;font-size:16px;">Mantém você no controle</span><span style="color:#8d8aa3;font-size:15px;"> — Aprovações e decisões críticas continuam suas.</span></div></div>
+        </div>
+      </div>
+      <!-- PR / logs mockup -->
+      <div style="flex:1 1 380px;min-width:300px;">
+        <div style="border-radius:20px;border:1px solid rgba(255,255,255,0.1);background:linear-gradient(180deg,rgba(20,18,34,0.96),rgba(12,11,22,0.96));box-shadow:0 30px 80px -30px rgba(60,40,160,0.55);overflow:hidden;">
+          <div style="display:flex;align-items:center;gap:8px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
+            <span style="width:11px;height:11px;border-radius:50%;background:#ff6058;"></span>
+            <span style="width:11px;height:11px;border-radius:50%;background:#ffbd2e;"></span>
+            <span style="width:11px;height:11px;border-radius:50%;background:#28c840;"></span>
+            <span style="margin-left:10px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#8d8aa3;">pull-request · #142</span>
+          </div>
+          <div style="padding:18px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.9;">
+            <div style="color:#dfe0f0;font-size:14px;margin-bottom:10px;font-weight:600;">feat: implementa novo fluxo de autenticação</div>
+            <div style="color:#6f6c85;">agentops/auth/<span style="color:#cfd0e2;">service.py</span></div>
+            <div style="background:rgba(40,200,64,0.1);border-left:2px solid #28c840;padding:1px 10px;color:#7fe39b;">+ def issue_refresh_token(user):</div>
+            <div style="background:rgba(40,200,64,0.1);border-left:2px solid #28c840;padding:1px 10px;color:#7fe39b;">+     return sign(user, ttl=REFRESH_TTL)</div>
+            <div style="background:rgba(255,90,90,0.1);border-left:2px solid #ff6058;padding:1px 10px;color:#ff9b9b;">- # TODO: implementar refresh</div>
+            <div style="margin-top:14px;display:flex;gap:16px;color:#8d8aa3;">
+              <span style="color:#5be0a0;">✓ 12 testes</span>
+              <span style="color:#aebdff;">✓ QA aprovado</span>
+              <span style="color:#ffbd2e;">⧖ aguardando você</span>
+            </div>
+            <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.07);display:flex;gap:10px;">
+              <span style="padding:8px 16px;border-radius:9px;background:linear-gradient(135deg,#5b8cff,#a06bff);color:#fff;">Aprovar &amp; mergear</span>
+              <span style="padding:8px 16px;border-radius:9px;border:1px solid rgba(255,255,255,0.15);color:#cfd0e2;">Pedir ajustes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AGENTES ============ -->
+  <section data-screen-label="Agentes" style="position:relative;padding:clamp(64px,9vw,120px) clamp(20px,4vw,48px);">
+    <div style="max-width:1180px;margin:0 auto;">
+      <div style="display:flex;align-items:flex-end;gap:20px;justify-content:space-between;flex-wrap:wrap;margin-bottom:42px;">
+        <div>
+          <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#7d9bff;">A equipe</p>
+          <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4vw,44px);line-height:1.1;letter-spacing:-0.02em;color:#f2f1f8;max-width:18ch;">Cinco agentes especializados, um por fase</h2>
+        </div>
+        <img src="assets/athlas-sherlock.png" alt="Athlas investiga" style="height:120px;width:auto;filter:drop-shadow(0 12px 30px rgba(91,140,255,.45));animation:floaty 6s ease-in-out infinite;" />
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:10px;"><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;background:linear-gradient(110deg,#aebdff,#c9a6ff);-webkit-background-clip:text;background-clip:text;color:transparent;">PM Agent</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Analisa a demanda: user story, critérios de aceite, riscos e próximos passos.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:10px;"><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;background:linear-gradient(110deg,#aebdff,#c9a6ff);-webkit-background-clip:text;background-clip:text;color:transparent;">Architect Agent</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Define a solução técnica, arquivos, padrões e dependências.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:10px;"><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;background:linear-gradient(110deg,#aebdff,#c9a6ff);-webkit-background-clip:text;background-clip:text;color:transparent;">Software Engineer</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Implementa o código em um workspace isolado e seguro.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:10px;"><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;background:linear-gradient(110deg,#aebdff,#c9a6ff);-webkit-background-clip:text;background-clip:text;color:transparent;">QA Agent</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Roda os testes e valida os critérios de aceite.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:10px;"><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;background:linear-gradient(110deg,#aebdff,#c9a6ff);-webkit-background-clip:text;background-clip:text;color:transparent;">Principal Review</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Revisão técnica e de riscos antes de alterar o código.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COMO FUNCIONA ============ -->
+  <section id="como" data-screen-label="Como funciona" style="position:relative;padding:clamp(64px,9vw,120px) clamp(20px,4vw,48px);background:linear-gradient(180deg,#0d0b1a,#08070f);border-top:1px solid rgba(255,255,255,0.05);">
+    <div style="max-width:1000px;margin:0 auto;">
+      <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#7d9bff;">Como funciona</p>
+      <h2 style="margin:0 0 48px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4vw,46px);line-height:1.1;letter-spacing:-0.02em;color:#f2f1f8;">Do requisito ao pull request em cinco passos</h2>
+      <div style="display:flex;flex-direction:column;gap:0;">
+        <div style="display:flex;gap:24px;align-items:flex-start;padding:24px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="flex-shrink:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4vw,40px);background:linear-gradient(135deg,#5b8cff,#a06bff);-webkit-background-clip:text;background-clip:text;color:transparent;min-width:64px;">01</span><div style="padding-top:4px;"><h3 style="margin:0 0 6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(18px,2.2vw,22px);color:#f2f1f8;">Conecte seu projeto e repositório</h3><p style="margin:0;font-size:15.5px;line-height:1.55;color:#a09db5;">Integre o AgentOps ao seu código e ao GitHub.</p></div></div>
+        <div style="display:flex;gap:24px;align-items:flex-start;padding:24px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="flex-shrink:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4vw,40px);background:linear-gradient(135deg,#5b8cff,#a06bff);-webkit-background-clip:text;background-clip:text;color:transparent;min-width:64px;">02</span><div style="padding-top:4px;"><h3 style="margin:0 0 6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(18px,2.2vw,22px);color:#f2f1f8;">Registre ou importe uma demanda</h3><p style="margin:0;font-size:15.5px;line-height:1.55;color:#a09db5;">Um work item, uma issue ou um requisito técnico.</p></div></div>
+        <div style="display:flex;gap:24px;align-items:flex-start;padding:24px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="flex-shrink:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4vw,40px);background:linear-gradient(135deg,#5b8cff,#a06bff);-webkit-background-clip:text;background-clip:text;color:transparent;min-width:64px;">03</span><div style="padding-top:4px;"><h3 style="margin:0 0 6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(18px,2.2vw,22px);color:#f2f1f8;">Os agentes analisam, planejam e implementam</h3><p style="margin:0;font-size:15.5px;line-height:1.55;color:#a09db5;">O fluxo roda por fases, com cada agente no seu papel.</p></div></div>
+        <div style="display:flex;gap:24px;align-items:flex-start;padding:24px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="flex-shrink:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4vw,40px);background:linear-gradient(135deg,#5b8cff,#a06bff);-webkit-background-clip:text;background-clip:text;color:transparent;min-width:64px;">04</span><div style="padding-top:4px;"><h3 style="margin:0 0 6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(18px,2.2vw,22px);color:#f2f1f8;">O AgentOps gera logs, fases e rastreabilidade</h3><p style="margin:0;font-size:15.5px;line-height:1.55;color:#a09db5;">Você acompanha cada passo com evidências.</p></div></div>
+        <div style="display:flex;gap:24px;align-items:flex-start;padding:24px 0;border-bottom:1px solid rgba(255,255,255,0.07);"><span style="flex-shrink:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4vw,40px);background:linear-gradient(135deg,#5b8cff,#a06bff);-webkit-background-clip:text;background-clip:text;color:transparent;min-width:64px;">05</span><div style="padding-top:4px;"><h3 style="margin:0 0 6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(18px,2.2vw,22px);color:#f2f1f8;">Você revisa, aprova, homologa e evolui</h3><p style="margin:0;font-size:15.5px;line-height:1.55;color:#a09db5;">Aprovação humana fecha o ciclo — ou pede retrabalho.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRODUCT PREVIEW ============ -->
+  <section data-screen-label="Preview" style="position:relative;padding:clamp(56px,8vw,100px) clamp(20px,4vw,48px);">
+    <div style="max-width:1180px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:42px;">
+        <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#7d9bff;">Por dentro</p>
+        <h2 style="margin:0 0 10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,3.5vw,40px);color:#f2f1f8;">Um produto real. Não slides.</h2>
+        <p style="margin:0;font-size:16px;color:#a09db5;max-width:56ch;margin-left:auto;margin-right:auto;">Dashboard, Kanban por fases, escritório de agentes, catálogo de modelos — tudo isso já existe no código que você recebe.</p>
+      </div>
+
+      <!-- ============ VÍDEO-DEMO ============ -->
+      <!-- ⚠️ AÇÃO NECESSÁRIA: grave um vídeo curto (60-120s) mostrando uma demanda entrando e
+           o Pull Request saindo. É a prova mais forte de "produto real". Depois:
+           1) Suba no YouTube/Vimeo e descomente o <iframe> abaixo com o seu link de embed; OU
+           2) Use um arquivo local trocando o bloco por <video controls poster="..."><source src="assets/demo.mp4" type="video/mp4"></video>.
+           Enquanto não houver vídeo, este bloco mostra um placeholder clicável. -->
+      <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);background:#12101e;box-shadow:0 44px 110px -45px rgba(91,140,255,0.6);margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02);">
+          <span style="width:11px;height:11px;border-radius:50%;background:#ff6058;"></span>
+          <span style="width:11px;height:11px;border-radius:50%;background:#ffbd2e;"></span>
+          <span style="width:11px;height:11px;border-radius:50%;background:#28c840;"></span>
+          <span style="margin-left:12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#8d8aa3;">agentops · Demonstração — uma demanda vira um Pull Request</span>
+        </div>
+        <div style="position:relative;width:100%;padding-top:56.25%;background:radial-gradient(ellipse at 50% 40%, rgba(91,140,255,0.18), transparent 60%), #0a0913;">
+          <!-- Quando tiver o vídeo, descomente e ajuste o src:
+          <iframe src="https://www.youtube.com/embed/SEU_VIDEO_ID" title="Demo AgentOps" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
+          -->
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px;">
+            <span style="width:74px;height:74px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;box-shadow:0 16px 40px -10px rgba(120,110,255,0.85);"><span style="margin-left:5px;border-left:22px solid #fff;border-top:14px solid transparent;border-bottom:14px solid transparent;"></span></span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(16px,2.4vw,20px);color:#f2f1f8;">Veja o AgentOps rodando de verdade</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8d8aa3;">[ placeholder — insira aqui o vídeo-demo de 60-120s ]</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- featured screenshot -->
+      <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);background:#12101e;box-shadow:0 44px 110px -45px rgba(91,140,255,0.6);margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02);">
+          <span style="width:11px;height:11px;border-radius:50%;background:#ff6058;"></span>
+          <span style="width:11px;height:11px;border-radius:50%;background:#ffbd2e;"></span>
+          <span style="width:11px;height:11px;border-radius:50%;background:#28c840;"></span>
+          <span style="margin-left:12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#8d8aa3;">agentops · Dashboard de execuções</span>
+        </div>
+        <img src="assets/screens/dashboard.png" alt="Dashboard do AgentOps" loading="lazy" style="display:block;width:100%;height:auto;" />
+      </div>
+      <!-- grid -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;">
+        <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.09);background:#12101e;box-shadow:0 24px 60px -30px rgba(0,0,0,0.7);">
+          <div style="display:flex;align-items:center;gap:6px;padding:9px 13px;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);">
+            <span style="width:8px;height:8px;border-radius:50%;background:#ff6058;"></span><span style="width:8px;height:8px;border-radius:50%;background:#ffbd2e;"></span><span style="width:8px;height:8px;border-radius:50%;background:#28c840;"></span>
+            <span style="margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8d8aa3;">Kanban por fases</span>
+          </div>
+          <img src="assets/screens/kanban.png" alt="Kanban Board por fases" loading="lazy" style="display:block;width:100%;height:auto;" />
+        </div>
+        <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.09);background:#12101e;box-shadow:0 24px 60px -30px rgba(0,0,0,0.7);">
+          <div style="display:flex;align-items:center;gap:6px;padding:9px 13px;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);">
+            <span style="width:8px;height:8px;border-radius:50%;background:#ff6058;"></span><span style="width:8px;height:8px;border-radius:50%;background:#ffbd2e;"></span><span style="width:8px;height:8px;border-radius:50%;background:#28c840;"></span>
+            <span style="margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8d8aa3;">Escritório de agentes</span>
+          </div>
+          <img src="assets/screens/escritorio.png" alt="Escritório de agentes" loading="lazy" style="display:block;width:100%;height:auto;" />
+        </div>
+        <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.09);background:#12101e;box-shadow:0 24px 60px -30px rgba(0,0,0,0.7);">
+          <div style="display:flex;align-items:center;gap:6px;padding:9px 13px;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);">
+            <span style="width:8px;height:8px;border-radius:50%;background:#ff6058;"></span><span style="width:8px;height:8px;border-radius:50%;background:#ffbd2e;"></span><span style="width:8px;height:8px;border-radius:50%;background:#28c840;"></span>
+            <span style="margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8d8aa3;">Catálogo de agentes</span>
+          </div>
+          <img src="assets/screens/agents.png" alt="Catálogo de agentes" loading="lazy" style="display:block;width:100%;height:auto;" />
+        </div>
+        <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.09);background:#12101e;box-shadow:0 24px 60px -30px rgba(0,0,0,0.7);">
+          <div style="display:flex;align-items:center;gap:6px;padding:9px 13px;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);">
+            <span style="width:8px;height:8px;border-radius:50%;background:#ff6058;"></span><span style="width:8px;height:8px;border-radius:50%;background:#ffbd2e;"></span><span style="width:8px;height:8px;border-radius:50%;background:#28c840;"></span>
+            <span style="margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8d8aa3;">Catálogo de modelos de IA</span>
+          </div>
+          <img src="assets/screens/modelos.png" alt="Catálogo de modelos de IA" loading="lazy" style="display:block;width:100%;height:auto;" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section id="features" data-screen-label="Features" style="position:relative;padding:clamp(64px,9vw,120px) clamp(20px,4vw,48px);background:linear-gradient(180deg,#08070f,#0d0b1a);border-top:1px solid rgba(255,255,255,0.05);">
+    <div style="max-width:1180px;margin:0 auto;">
+      <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#7d9bff;">O que tem dentro</p>
+      <h2 style="margin:0 0 48px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4vw,46px);line-height:1.1;letter-spacing:-0.02em;color:#f2f1f8;max-width:20ch;">Uma base de engenharia, não um chat de IA</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;">
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:12px;"><span style="width:fit-content;padding:4px 10px;border-radius:8px;background:rgba(91,140,255,0.12);border:1px solid rgba(125,155,255,0.25);font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">01</span><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#f2f1f8;">Orquestração de Agent Runs</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Cada demanda vira uma execução com fases, estado e histórico.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:12px;"><span style="width:fit-content;padding:4px 10px;border-radius:8px;background:rgba(91,140,255,0.12);border:1px solid rgba(125,155,255,0.25);font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">02</span><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#f2f1f8;">Integração com GitHub</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Os agentes preparam branches, commits e Pull Requests.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:12px;"><span style="width:fit-content;padding:4px 10px;border-radius:8px;background:rgba(91,140,255,0.12);border:1px solid rgba(125,155,255,0.25);font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">03</span><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#f2f1f8;">Azure DevOps estruturado</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Entrada de work items por webhook/API, previsto e modelado.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:12px;"><span style="width:fit-content;padding:4px 10px;border-radius:8px;background:rgba(91,140,255,0.12);border:1px solid rgba(125,155,255,0.25);font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">04</span><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#f2f1f8;">Workflows por fases</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">PM → Design → Arquitetura → Review → Engenharia → QA.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:12px;"><span style="width:fit-content;padding:4px 10px;border-radius:8px;background:rgba(91,140,255,0.12);border:1px solid rgba(125,155,255,0.25);font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">05</span><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#f2f1f8;">PM Analysis estruturado</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">User story, critérios de aceite, riscos e próximos passos.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:12px;"><span style="width:fit-content;padding:4px 10px;border-radius:8px;background:rgba(91,140,255,0.12);border:1px solid rgba(125,155,255,0.25);font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">06</span><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#f2f1f8;">Multi-provider de IA</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Arquitetura preparada para vários providers de modelos.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:12px;"><span style="width:fit-content;padding:4px 10px;border-radius:8px;background:rgba(91,140,255,0.12);border:1px solid rgba(125,155,255,0.25);font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">07</span><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#f2f1f8;">Harness desacoplado</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Mock, Claude, OpenAI, Gemini e Ollama sem reescrever o core.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:12px;"><span style="width:fit-content;padding:4px 10px;border-radius:8px;background:rgba(91,140,255,0.12);border:1px solid rgba(125,155,255,0.25);font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">08</span><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#f2f1f8;">Sandbox workspace</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Execução isolada para o agente implementar com segurança.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:12px;"><span style="width:fit-content;padding:4px 10px;border-radius:8px;background:rgba(91,140,255,0.12);border:1px solid rgba(125,155,255,0.25);font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">09</span><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#f2f1f8;">Dashboard web</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Acompanhe execuções, projetos, repositórios e settings.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:12px;"><span style="width:fit-content;padding:4px 10px;border-radius:8px;background:rgba(91,140,255,0.12);border:1px solid rgba(125,155,255,0.25);font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">10</span><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#f2f1f8;">Logs e fases por execução</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Rastreabilidade e evidências de ponta a ponta.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:12px;"><span style="width:fit-content;padding:4px 10px;border-radius:8px;background:rgba(91,140,255,0.12);border:1px solid rgba(125,155,255,0.25);font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">11</span><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#f2f1f8;">Extensível para novos agentes</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Estrutura pronta para você criar os seus próprios agentes.</p></div>
+        <div style="padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:12px;"><span style="width:fit-content;padding:4px 10px;border-radius:8px;background:rgba(91,140,255,0.12);border:1px solid rgba(125,155,255,0.25);font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">12</span><h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#f2f1f8;">Base real para produto</h3><p style="margin:0;font-size:14.5px;line-height:1.55;color:#a09db5;">Não é demo: é fundação para um produto comercial.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ O QUE VOCÊ RECEBE ============ -->
+  <section data-screen-label="O que recebe" style="position:relative;padding:clamp(64px,9vw,120px) clamp(20px,4vw,48px);">
+    <div style="max-width:1000px;margin:0 auto;">
+      <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#7d9bff;">A oferta</p>
+      <h2 style="margin:0 0 12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4vw,46px);line-height:1.1;letter-spacing:-0.02em;color:#f2f1f8;">O que você recebe</h2>
+      <p style="margin:0 0 40px;font-size:16px;color:#a09db5;max-width:60ch;">Acesso ao código-fonte de um produto real e em evolução — não a slides, não a um curso gravado.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;">
+        <div style="display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Código-fonte completo do AgentOps</span></div>
+        <div style="display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Front-end em Next.js 13 + PrimeReact</span></div>
+        <div style="display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Back-end em FastAPI (Python 3.12)</span></div>
+        <div style="display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Arquitetura modular e desacoplada</span></div>
+        <div style="display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Base de agentes especializados</span></div>
+        <div style="display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Estrutura de orquestração de execuções</span></div>
+        <div style="display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Modelagem de projetos, repositórios, work items e agent runs</span></div>
+        <div style="display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Documentação técnica inicial</span></div>
+        <div style="display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);"><span style="flex-shrink:0;width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Projeto em evolução para customizar, estudar, vender ou virar produto</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRANSFORMAÇÃO ============ -->
+  <section data-screen-label="Transformação" style="position:relative;padding:clamp(64px,9vw,120px) clamp(20px,4vw,48px);background:linear-gradient(180deg,#08070f,#0d0b1a);border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);">
+    <div style="max-width:1100px;margin:0 auto;">
+      <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#7d9bff;text-align:center;">A transformação</p>
+      <h2 style="margin:0 0 52px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4vw,44px);line-height:1.12;letter-spacing:-0.02em;color:#f2f1f8;text-align:center;max-width:24ch;margin-left:auto;margin-right:auto;">De desenvolvedor executor para operador de uma fábrica de software com IA</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;">
+        <div style="padding:32px;border-radius:20px;border:1px solid rgba(255,120,120,0.16);background:rgba(255,90,90,0.04);">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:#ff8a8a;">Antes</span>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:22px;">
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;color:#ff8a8a;font-size:18px;line-height:1.3;">✕</span><span style="font-size:15.5px;color:#c9c6d8;line-height:1.45;">Copia e cola prompts o dia inteiro</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;color:#ff8a8a;font-size:18px;line-height:1.3;">✕</span><span style="font-size:15.5px;color:#c9c6d8;line-height:1.45;">Analisa cada demanda manualmente</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;color:#ff8a8a;font-size:18px;line-height:1.3;">✕</span><span style="font-size:15.5px;color:#c9c6d8;line-height:1.45;">Perde contexto entre ferramentas</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;color:#ff8a8a;font-size:18px;line-height:1.3;">✕</span><span style="font-size:15.5px;color:#c9c6d8;line-height:1.45;">Abre Pull Requests na mão</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;color:#ff8a8a;font-size:18px;line-height:1.3;">✕</span><span style="font-size:15.5px;color:#c9c6d8;line-height:1.45;">Não tem rastreabilidade do que foi feito</span></div>
+          </div>
+        </div>
+        <div style="padding:32px;border-radius:20px;border:1px solid rgba(125,155,255,0.28);background:linear-gradient(180deg,rgba(91,140,255,0.08),rgba(160,107,255,0.05));box-shadow:0 24px 60px -28px rgba(91,140,255,0.5);">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:#aebdff;">Depois</span>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:22px;">
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">✓</span><span style="font-size:15.5px;color:#f2f1f8;line-height:1.45;">Define a demanda com clareza</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">✓</span><span style="font-size:15.5px;color:#f2f1f8;line-height:1.45;">Agentes analisam e executam por fases</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">✓</span><span style="font-size:15.5px;color:#f2f1f8;line-height:1.45;">A plataforma organiza o fluxo</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">✓</span><span style="font-size:15.5px;color:#f2f1f8;line-height:1.45;">O código evolui em Pull Requests</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">✓</span><span style="font-size:15.5px;color:#f2f1f8;line-height:1.45;">Você atua como arquiteto, revisor e dono</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PARA QUEM É / NÃO É ============ -->
+  <section data-screen-label="Para quem" style="position:relative;padding:clamp(64px,9vw,120px) clamp(20px,4vw,48px);">
+    <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:28px;">
+      <div>
+        <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#7d9bff;">Para quem é</p>
+        <h2 style="margin:0 0 28px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3vw,34px);color:#f2f1f8;">Feito para builders</h2>
+        <div style="display:flex;flex-direction:column;gap:11px;">
+          <div style="display:flex;align-items:center;gap:13px;padding:15px 18px;border-radius:13px;border:1px solid rgba(125,155,255,0.18);background:rgba(91,140,255,0.05);"><span style="flex-shrink:0;width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);box-shadow:0 0 10px rgba(120,110,255,.7);"></span><span style="font-size:15.5px;color:#e2e1ee;">Desenvolvedor full stack</span></div>
+          <div style="display:flex;align-items:center;gap:13px;padding:15px 18px;border-radius:13px;border:1px solid rgba(125,155,255,0.18);background:rgba(91,140,255,0.05);"><span style="flex-shrink:0;width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);box-shadow:0 0 10px rgba(120,110,255,.7);"></span><span style="font-size:15.5px;color:#e2e1ee;">Freelancer</span></div>
+          <div style="display:flex;align-items:center;gap:13px;padding:15px 18px;border-radius:13px;border:1px solid rgba(125,155,255,0.18);background:rgba(91,140,255,0.05);"><span style="flex-shrink:0;width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);box-shadow:0 0 10px rgba(120,110,255,.7);"></span><span style="font-size:15.5px;color:#e2e1ee;">Tech lead</span></div>
+          <div style="display:flex;align-items:center;gap:13px;padding:15px 18px;border-radius:13px;border:1px solid rgba(125,155,255,0.18);background:rgba(91,140,255,0.05);"><span style="flex-shrink:0;width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);box-shadow:0 0 10px rgba(120,110,255,.7);"></span><span style="font-size:15.5px;color:#e2e1ee;">Founder técnico</span></div>
+          <div style="display:flex;align-items:center;gap:13px;padding:15px 18px;border-radius:13px;border:1px solid rgba(125,155,255,0.18);background:rgba(91,140,255,0.05);"><span style="flex-shrink:0;width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);box-shadow:0 0 10px rgba(120,110,255,.7);"></span><span style="font-size:15.5px;color:#e2e1ee;">Consultor de software</span></div>
+          <div style="display:flex;align-items:center;gap:13px;padding:15px 18px;border-radius:13px;border:1px solid rgba(125,155,255,0.18);background:rgba(91,140,255,0.05);"><span style="flex-shrink:0;width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);box-shadow:0 0 10px rgba(120,110,255,.7);"></span><span style="font-size:15.5px;color:#e2e1ee;">Criador de produtos digitais</span></div>
+          <div style="display:flex;align-items:center;gap:13px;padding:15px 18px;border-radius:13px;border:1px solid rgba(125,155,255,0.18);background:rgba(91,140,255,0.05);"><span style="flex-shrink:0;width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);box-shadow:0 0 10px rgba(120,110,255,.7);"></span><span style="font-size:15.5px;color:#e2e1ee;">Quem quer vender automação de engenharia com IA</span></div>
+        </div>
+      </div>
+      <div>
+        <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#8d8aa3;">Para quem não é</p>
+        <h2 style="margin:0 0 28px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3vw,34px);color:#cfcddd;">Sendo honesto</h2>
+        <div style="display:flex;flex-direction:column;gap:11px;">
+          <div style="display:flex;align-items:flex-start;gap:13px;padding:15px 18px;border-radius:13px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02);"><span style="flex-shrink:0;color:#6f6c85;font-size:16px;line-height:1.4;">✕</span><span style="font-size:15.5px;color:#9a97b0;line-height:1.45;">Quem quer um SaaS final, plug-and-play, sem configurar nada</span></div>
+          <div style="display:flex;align-items:flex-start;gap:13px;padding:15px 18px;border-radius:13px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02);"><span style="flex-shrink:0;color:#6f6c85;font-size:16px;line-height:1.4;">✕</span><span style="font-size:15.5px;color:#9a97b0;line-height:1.45;">Quem não quer mexer em código</span></div>
+          <div style="display:flex;align-items:flex-start;gap:13px;padding:15px 18px;border-radius:13px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02);"><span style="flex-shrink:0;color:#6f6c85;font-size:16px;line-height:1.4;">✕</span><span style="font-size:15.5px;color:#9a97b0;line-height:1.45;">Quem espera mágica e não quer revisar PRs</span></div>
+          <div style="display:flex;align-items:flex-start;gap:13px;padding:15px 18px;border-radius:13px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02);"><span style="flex-shrink:0;color:#6f6c85;font-size:16px;line-height:1.4;">✕</span><span style="font-size:15.5px;color:#9a97b0;line-height:1.45;">Quem não quer aprender agentes, automação e arquitetura</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROVA SOCIAL ============ -->
+  <!-- ⚠️ AÇÃO NECESSÁRIA: substitua os depoimentos e a bio abaixo por conteúdo REAL.
+       Depoimento verdadeiro (com nome, @ e, se possível, foto/print) é o que mais converte.
+       Se ainda não tem clientes, use: feedback de quem testou, prints do produto rodando,
+       seu histórico/credenciais, ou números do projeto (commits, features, etc.). -->
+  <section data-screen-label="Prova" style="position:relative;padding:clamp(64px,9vw,120px) clamp(20px,4vw,48px);background:linear-gradient(180deg,#0d0b1a,#08070f);border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);">
+    <div style="max-width:1180px;margin:0 auto;">
+      <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#7d9bff;text-align:center;">Quem já está construindo</p>
+      <h2 style="margin:0 0 44px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4vw,42px);line-height:1.12;letter-spacing:-0.02em;color:#f2f1f8;text-align:center;">O que builders dizem sobre o AgentOps</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-bottom:44px;">
+        <div style="padding:26px;border-radius:18px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:16px;">
+          <p style="margin:0;font-size:15.5px;line-height:1.6;color:#e2e1ee;">"[Depoimento real — o que a pessoa conseguiu fazer/economizar com o AgentOps. Seja específico: tempo, projeto entregue, etc.]"</p>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="flex-shrink:0;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);"></span><div><div style="font-weight:600;color:#f2f1f8;font-size:14.5px;">Nome do builder</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8d8aa3;">@usuario · cargo/empresa</div></div></div>
+        </div>
+        <div style="padding:26px;border-radius:18px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:16px;">
+          <p style="margin:0;font-size:15.5px;line-height:1.6;color:#e2e1ee;">"[Depoimento real — foque na transformação: antes eu fazia X na mão, agora os agentes fazem Y.]"</p>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="flex-shrink:0;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);"></span><div><div style="font-weight:600;color:#f2f1f8;font-size:14.5px;">Nome do builder</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8d8aa3;">@usuario · cargo/empresa</div></div></div>
+        </div>
+        <div style="padding:26px;border-radius:18px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));display:flex;flex-direction:column;gap:16px;">
+          <p style="margin:0;font-size:15.5px;line-height:1.6;color:#e2e1ee;">"[Depoimento real — por que valeu a pena comprar o código-fonte em vez de começar do zero.]"</p>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="flex-shrink:0;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);"></span><div><div style="font-weight:600;color:#f2f1f8;font-size:14.5px;">Nome do builder</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8d8aa3;">@usuario · cargo/empresa</div></div></div>
+        </div>
+      </div>
+
+      <!-- AUTORIDADE / QUEM CONSTRUIU -->
+      <div style="max-width:760px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:24px;padding:28px;border-radius:20px;border:1px solid rgba(125,155,255,0.22);background:linear-gradient(180deg,rgba(91,140,255,0.07),rgba(160,107,255,0.04));">
+        <span style="flex-shrink:0;width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#a06bff);"></span>
+        <div style="flex:1 1 320px;">
+          <p style="margin:0 0 6px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#aebdff;">Quem construiu</p>
+          <h3 style="margin:0 0 8px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;color:#f2f1f8;">[Seu nome]</h3>
+          <p style="margin:0;font-size:15px;line-height:1.6;color:#a09db5;">[Sua credencial em 2-3 linhas: anos de experiência, o que você já construiu/entregou, por que você criou o AgentOps. Isso responde "por que confiar em quem está vendendo".]</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ URGÊNCIA ============ -->
+  <section data-screen-label="Urgência" style="position:relative;padding:clamp(70px,10vw,130px) clamp(20px,4vw,48px);overflow:hidden;">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;max-width:120vw;border-radius:50%;background:radial-gradient(circle,rgba(160,107,255,0.16),transparent 60%);filter:blur(20px);pointer-events:none;animation:pulseGlow 8s ease-in-out infinite;"></div>
+    <div style="position:relative;max-width:880px;margin:0 auto;text-align:center;">
+      <img src="assets/athlas-cheer.png" alt="Athlas" style="height:96px;width:auto;margin-bottom:24px;filter:drop-shadow(0 12px 30px rgba(91,140,255,.5));animation:floaty 5.5s ease-in-out infinite;" />
+      <h2 style="margin:0 0 22px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4.5vw,50px);line-height:1.08;letter-spacing:-0.02em;color:#f4f3fa;">Quem aprender a orquestrar agentes agora vai construir com uma <span style="background:linear-gradient(110deg,#5b8cff,#a06bff 70%);-webkit-background-clip:text;background-clip:text;color:transparent;">vantagem absurda</span></h2>
+      <p style="margin:0;font-size:clamp(16px,2vw,20px);line-height:1.6;color:#b6b3c9;max-width:60ch;margin-left:auto;margin-right:auto;">Enquanto a maioria ainda usa IA como chat, builders já estão criando fluxos, agentes, pipelines e produtos inteiros em cima de código existente.</p>
+
+      <!-- ⚠️ AÇÃO NECESSÁRIA: a escassez precisa ser VERDADEIRA. Ajuste o nº de vagas e a data
+           do fim da oferta (variável DEADLINE no <script> ao final do arquivo). Urgência falsa destrói confiança. -->
+      <div style="margin:36px auto 0;display:inline-flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:18px;padding:18px 28px;border-radius:16px;border:1px solid rgba(160,107,255,0.3);background:rgba(160,107,255,0.08);">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:13.5px;color:#cfcddd;">Preço de fundador (−60%) encerra em</span>
+        <span id="countdown" style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:clamp(18px,3vw,24px);letter-spacing:0.04em;color:#fff;">--:--:--</span>
+      </div>
+      <p style="margin:14px 0 28px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#8d8aa3;">Depois disso, o valor volta para R$997.</p>
+      <a href="#oferta" style="display:inline-block;text-decoration:none;padding:16px 32px;border-radius:13px;background:linear-gradient(135deg,#5b8cff,#a06bff);color:#fff;font-weight:600;font-size:16px;box-shadow:0 14px 38px -10px rgba(120,110,255,0.8);">Garantir meu acesso por R$397</a>
+    </div>
+  </section>
+
+  <!-- ============ OFERTA ============ -->
+  <section id="oferta" data-screen-label="Oferta" style="position:relative;padding:clamp(64px,9vw,120px) clamp(20px,4vw,48px);background:linear-gradient(180deg,#0d0b1a,#08070f);border-top:1px solid rgba(255,255,255,0.05);">
+    <div style="max-width:920px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:42px;">
+        <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#7d9bff;">A oferta de lançamento</p>
+        <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4vw,46px);color:#f2f1f8;">Leve o código-fonte completo do AgentOps</h2>
+      </div>
+
+      <!-- OFERTA A -->
+      <div id="offerA" style="position:relative;border-radius:24px;border:1px solid rgba(125,155,255,0.3);background:linear-gradient(180deg,rgba(20,18,34,0.95),rgba(12,11,22,0.98));box-shadow:0 40px 100px -40px rgba(91,140,255,0.55);overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#5b8cff,#a06bff);"></div>
+        <div style="padding:clamp(28px,5vw,52px);display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:36px;align-items:center;">
+          <div>
+            <span style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:rgba(91,140,255,0.14);border:1px solid rgba(125,155,255,0.3);font-family:'JetBrains Mono',monospace;font-size:12px;color:#aebdff;">Oferta de lançamento <span style="padding:2px 8px;border-radius:999px;background:linear-gradient(135deg,#5b8cff,#a06bff);color:#fff;font-weight:700;">−60%</span></span>
+            <p style="margin:18px 0 8px;font-size:15px;color:#a09db5;">Garanta seu acesso pelo preço de fundador, com <strong style="color:#cfcddd;">60% de desconto</strong> no lançamento.</p>
+            <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+              <span style="font-family:'Space Grotesk',sans-serif;font-size:clamp(20px,3vw,26px);color:#6f6c85;text-decoration:line-through;">R$997</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(44px,7vw,68px);line-height:1;background:linear-gradient(110deg,#5b8cff,#a06bff);-webkit-background-clip:text;background-clip:text;color:transparent;">R$397</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#6f6c85;">acesso founder</span>
+            </div>
+            <a href="https://pay.kiwify.com.br/jL4ieR0" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:26px;text-decoration:none;padding:17px 30px;border-radius:13px;background:linear-gradient(135deg,#5b8cff,#a06bff);color:#fff;font-weight:600;font-size:16.5px;box-shadow:0 16px 40px -12px rgba(120,110,255,0.85);">Quero comprar o código-fonte</a>
+            <a href="#comunidade" style="display:block;text-align:center;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#aebdff;text-decoration:none;">+ acesso à comunidade de builders</a>
+            <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#8d8aa3;"><span style="color:#5be0a0;">✓</span> 7 dias de garantia · pagamento único · acesso imediato</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:13px;">
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Código-fonte completo (Next.js + FastAPI)</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Acesso garantido ao lançamento</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Comunidade de builders — atualizações e dicas</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Arquitetura modular pronta para customizar</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Base de agentes e orquestração</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="flex-shrink:0;width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">✓</span><span style="font-size:15px;color:#e2e1ee;line-height:1.45;">Documentação técnica inicial</span></div>
+          </div>
+        </div>
+        <div style="padding:18px clamp(28px,5vw,52px);border-top:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02);font-family:'JetBrains Mono',monospace;font-size:13px;color:#aebdff;text-align:center;">Para builders que querem construir em cima, não apenas assistir aula.</div>
+      </div>
+
+      <!-- OFERTA B -->
+      <div id="offerB" style="display:none;border-radius:24px;border:1px solid rgba(255,255,255,0.09);background:linear-gradient(180deg,rgba(18,16,30,0.95),rgba(12,11,22,0.98));overflow:hidden;box-shadow:0 40px 100px -40px rgba(91,140,255,0.45);">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
+          <div style="padding:clamp(28px,4vw,44px);border-right:1px solid rgba(255,255,255,0.07);">
+            <span style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#5be0a0;">Agora · Founder <span style="padding:2px 8px;border-radius:999px;background:linear-gradient(135deg,#5b8cff,#a06bff);color:#fff;font-weight:700;letter-spacing:0;">−60%</span></span>
+            <div style="margin:16px 0 4px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;"><span style="font-family:'Space Grotesk',sans-serif;font-size:clamp(20px,3vw,26px);color:#6f6c85;text-decoration:line-through;">R$997</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(40px,6vw,60px);line-height:1;background:linear-gradient(110deg,#5b8cff,#a06bff);-webkit-background-clip:text;background-clip:text;color:transparent;">R$397</span></div>
+            <p style="margin:0;font-size:14px;color:#a09db5;">Acesso ao código-fonte + comunidade + acesso garantido ao lançamento.</p>
+          </div>
+          <div style="padding:clamp(28px,4vw,44px);opacity:0.7;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#8d8aa3;">No lançamento</span>
+            <div style="margin:16px 0 4px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(40px,6vw,60px);line-height:1;color:#6f6c85;text-decoration:line-through;">R$997</div>
+            <p style="margin:0;font-size:14px;color:#8d8aa3;">Mesmo produto, preço cheio, sem o benefício de fundador.</p>
+          </div>
+        </div>
+        <div style="padding:clamp(28px,4vw,44px);border-top:1px solid rgba(255,255,255,0.07);">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:26px;">
+            <div style="display:flex;align-items:flex-start;gap:11px;"><span style="flex-shrink:0;width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;">✓</span><span style="font-size:14.5px;color:#e2e1ee;line-height:1.4;">Código-fonte completo (Next.js + FastAPI)</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px;"><span style="flex-shrink:0;width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;">✓</span><span style="font-size:14.5px;color:#e2e1ee;line-height:1.4;">Acesso garantido ao lançamento</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px;"><span style="flex-shrink:0;width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;">✓</span><span style="font-size:14.5px;color:#e2e1ee;line-height:1.4;">Comunidade de builders — atualizações e dicas</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px;"><span style="flex-shrink:0;width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;">✓</span><span style="font-size:14.5px;color:#e2e1ee;line-height:1.4;">Arquitetura modular pronta para customizar</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px;"><span style="flex-shrink:0;width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;">✓</span><span style="font-size:14.5px;color:#e2e1ee;line-height:1.4;">Base de agentes e orquestração</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px;"><span style="flex-shrink:0;width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#5b8cff,#a06bff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;">✓</span><span style="font-size:14.5px;color:#e2e1ee;line-height:1.4;">Documentação técnica inicial</span></div>
+          </div>
+          <a href="https://pay.kiwify.com.br/jL4ieR0" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;padding:17px 30px;border-radius:13px;background:linear-gradient(135deg,#5b8cff,#a06bff);color:#fff;font-weight:600;font-size:16.5px;box-shadow:0 16px 40px -12px rgba(120,110,255,0.85);">Quero comprar o código-fonte</a>
+          <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#8d8aa3;"><span style="color:#5be0a0;">✓</span> 7 dias de garantia · pagamento único · acesso imediato</div>
+          <p style="margin:16px 0 0;text-align:center;font-family:'JetBrains Mono',monospace;font-size:13px;color:#aebdff;">Para builders que querem construir em cima, não apenas assistir aula.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section id="faq" data-screen-label="FAQ" style="position:relative;padding:clamp(64px,9vw,120px) clamp(20px,4vw,48px);">
+    <div style="max-width:820px;margin:0 auto;">
+      <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#7d9bff;text-align:center;">Perguntas frequentes</p>
+      <h2 style="margin:0 0 44px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4vw,44px);color:#f2f1f8;text-align:center;">Ainda em dúvida?</h2>
+      <div id="faq-list" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="faq-item open" style="border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);overflow:hidden;"><button class="faq-toggle" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;background:transparent;border:none;cursor:pointer;text-align:left;color:#f2f1f8;font-family:'Space Grotesk',sans-serif;font-size:clamp(15px,2vw,17.5px);font-weight:600;"><span>O AgentOps já está 100% pronto?</span><span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:28px;height:28px;"><span class="icon-minus" style="font-size:24px;color:#a06bff;line-height:1;">−</span><span class="icon-plus" style="font-size:22px;color:#7d9bff;line-height:1;">+</span></span></button><div class="faq-answer" style="padding:0 22px 22px;font-size:15px;line-height:1.65;color:#a09db5;">Não. É um projeto em evolução — uma base real de produto, não um SaaS finalizado plug-and-play. Você recebe o código-fonte funcional e em desenvolvimento ativo.</div></div>
+        <div class="faq-item" style="border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);overflow:hidden;"><button class="faq-toggle" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;background:transparent;border:none;cursor:pointer;text-align:left;color:#f2f1f8;font-family:'Space Grotesk',sans-serif;font-size:clamp(15px,2vw,17.5px);font-weight:600;"><span>Preciso saber programar?</span><span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:28px;height:28px;"><span class="icon-minus" style="font-size:24px;color:#a06bff;line-height:1;">−</span><span class="icon-plus" style="font-size:22px;color:#7d9bff;line-height:1;">+</span></span></button><div class="faq-answer" style="padding:0 22px 22px;font-size:15px;line-height:1.65;color:#a09db5;">Sim. O AgentOps é feito para desenvolvedores e builders. Você vai rodar, configurar, customizar e evoluir o projeto no seu ambiente.</div></div>
+        <div class="faq-item" style="border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);overflow:hidden;"><button class="faq-toggle" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;background:transparent;border:none;cursor:pointer;text-align:left;color:#f2f1f8;font-family:'Space Grotesk',sans-serif;font-size:clamp(15px,2vw,17.5px);font-weight:600;"><span>Posso vender projetos usando essa base?</span><span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:28px;height:28px;"><span class="icon-minus" style="font-size:24px;color:#a06bff;line-height:1;">−</span><span class="icon-plus" style="font-size:22px;color:#7d9bff;line-height:1;">+</span></span></button><div class="faq-answer" style="padding:0 22px 22px;font-size:15px;line-height:1.65;color:#a09db5;">Sim. A ideia é exatamente essa: usar como base para entregar projetos, montar sua fábrica de software individual ou construir seu próprio produto.</div></div>
+        <div class="faq-item" style="border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);overflow:hidden;"><button class="faq-toggle" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;background:transparent;border:none;cursor:pointer;text-align:left;color:#f2f1f8;font-family:'Space Grotesk',sans-serif;font-size:clamp(15px,2vw,17.5px);font-weight:600;"><span>Posso customizar para minha empresa?</span><span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:28px;height:28px;"><span class="icon-minus" style="font-size:24px;color:#a06bff;line-height:1;">−</span><span class="icon-plus" style="font-size:22px;color:#7d9bff;line-height:1;">+</span></span></button><div class="faq-answer" style="padding:0 22px 22px;font-size:15px;line-height:1.65;color:#a09db5;">Sim. A arquitetura é modular e desacoplada, pensada para você adaptar agentes, fluxos e integrações ao seu contexto.</div></div>
+        <div class="faq-item" style="border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);overflow:hidden;"><button class="faq-toggle" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;background:transparent;border:none;cursor:pointer;text-align:left;color:#f2f1f8;font-family:'Space Grotesk',sans-serif;font-size:clamp(15px,2vw,17.5px);font-weight:600;"><span>Ele substitui desenvolvedores?</span><span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:28px;height:28px;"><span class="icon-minus" style="font-size:24px;color:#a06bff;line-height:1;">−</span><span class="icon-plus" style="font-size:22px;color:#7d9bff;line-height:1;">+</span></span></button><div class="faq-answer" style="padding:0 22px 22px;font-size:15px;line-height:1.65;color:#a09db5;">Não. Os agentes analisam, planejam e implementam fases — mas você continua aprovando PRs, homologações e decisões críticas. O humano segue no controle.</div></div>
+        <div class="faq-item" style="border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);overflow:hidden;"><button class="faq-toggle" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;background:transparent;border:none;cursor:pointer;text-align:left;color:#f2f1f8;font-family:'Space Grotesk',sans-serif;font-size:clamp(15px,2vw,17.5px);font-weight:600;"><span>Funciona com qualquer repositório?</span><span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:28px;height:28px;"><span class="icon-minus" style="font-size:24px;color:#a06bff;line-height:1;">−</span><span class="icon-plus" style="font-size:22px;color:#7d9bff;line-height:1;">+</span></span></button><div class="faq-answer" style="padding:0 22px 22px;font-size:15px;line-height:1.65;color:#a09db5;">A integração com GitHub é o caminho principal. Azure DevOps está estruturado e previsto. Como você tem o código-fonte, pode estender para outros fluxos.</div></div>
+        <div class="faq-item" style="border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);overflow:hidden;"><button class="faq-toggle" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;background:transparent;border:none;cursor:pointer;text-align:left;color:#f2f1f8;font-family:'Space Grotesk',sans-serif;font-size:clamp(15px,2vw,17.5px);font-weight:600;"><span>Quais integrações existem ou estão previstas?</span><span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:28px;height:28px;"><span class="icon-minus" style="font-size:24px;color:#a06bff;line-height:1;">−</span><span class="icon-plus" style="font-size:22px;color:#7d9bff;line-height:1;">+</span></span></button><div class="faq-answer" style="padding:0 22px 22px;font-size:15px;line-height:1.65;color:#a09db5;">GitHub (branches, commits e PRs), webhooks/API para work items e um harness desacoplado para múltiplos providers de IA: Mock, Claude, OpenAI, Gemini e Ollama. Azure DevOps previsto.</div></div>
+        <div class="faq-item" style="border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);overflow:hidden;"><button class="faq-toggle" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;background:transparent;border:none;cursor:pointer;text-align:left;color:#f2f1f8;font-family:'Space Grotesk',sans-serif;font-size:clamp(15px,2vw,17.5px);font-weight:600;"><span>Vou receber o código-fonte?</span><span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:28px;height:28px;"><span class="icon-minus" style="font-size:24px;color:#a06bff;line-height:1;">−</span><span class="icon-plus" style="font-size:22px;color:#7d9bff;line-height:1;">+</span></span></button><div class="faq-answer" style="padding:0 22px 22px;font-size:15px;line-height:1.65;color:#a09db5;">Sim. Front-end em Next.js 13 + PrimeReact e back-end em FastAPI, com a estrutura de orquestração, base de agentes e modelagem de dados.</div></div>
+        <div class="faq-item" style="border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);overflow:hidden;"><button class="faq-toggle" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;background:transparent;border:none;cursor:pointer;text-align:left;color:#f2f1f8;font-family:'Space Grotesk',sans-serif;font-size:clamp(15px,2vw,17.5px);font-weight:600;"><span>É uma imersão ao vivo?</span><span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:28px;height:28px;"><span class="icon-minus" style="font-size:24px;color:#a06bff;line-height:1;">−</span><span class="icon-plus" style="font-size:22px;color:#7d9bff;line-height:1;">+</span></span></button><div class="faq-answer" style="padding:0 22px 22px;font-size:15px;line-height:1.65;color:#a09db5;">Não. Não é curso nem aula ao vivo. É acesso ao código-fonte em evolução, mais uma comunidade de builders construindo em cima dele.</div></div>
+        <div class="faq-item" style="border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.025);overflow:hidden;"><button class="faq-toggle" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;background:transparent;border:none;cursor:pointer;text-align:left;color:#f2f1f8;font-family:'Space Grotesk',sans-serif;font-size:clamp(15px,2vw,17.5px);font-weight:600;"><span>Posso transformar isso em um SaaS meu?</span><span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:28px;height:28px;"><span class="icon-minus" style="font-size:24px;color:#a06bff;line-height:1;">−</span><span class="icon-plus" style="font-size:22px;color:#7d9bff;line-height:1;">+</span></span></button><div class="faq-answer" style="padding:0 22px 22px;font-size:15px;line-height:1.65;color:#a09db5;">Sim. É uma base real para você construir em cima, customizar e transformar no seu próprio produto comercial.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA FINAL ============ -->
+  <section data-screen-label="CTA final" style="position:relative;padding:clamp(72px,10vw,140px) clamp(20px,4vw,48px);overflow:hidden;background:linear-gradient(180deg,#08070f,#0d0b1a);border-top:1px solid rgba(255,255,255,0.05);">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:760px;height:760px;max-width:120vw;border-radius:50%;background:radial-gradient(circle,rgba(91,140,255,0.16),transparent 60%);filter:blur(20px);pointer-events:none;animation:pulseGlow 9s ease-in-out infinite;"></div>
+    <div style="position:relative;max-width:840px;margin:0 auto;text-align:center;">
+      <h2 style="margin:0 0 30px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(28px,4.5vw,52px);line-height:1.08;letter-spacing:-0.02em;color:#f4f3fa;">Pare de usar IA só como assistente. Comece a <span style="background:linear-gradient(110deg,#5b8cff,#a06bff 70%);-webkit-background-clip:text;background-clip:text;color:transparent;">operar uma fábrica de software</span> com agentes.</h2>
+      <a href="#oferta" style="display:inline-block;text-decoration:none;padding:18px 36px;border-radius:14px;background:linear-gradient(135deg,#5b8cff,#a06bff);color:#fff;font-weight:600;font-size:17px;box-shadow:0 18px 46px -12px rgba(120,110,255,0.85);">Quero acessar o AgentOps</a>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="position:relative;padding:48px clamp(20px,4vw,48px);border-top:1px solid rgba(255,255,255,0.07);background:#08070f;">
+    <div style="max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:11px;">
+        <img src="assets/athlas-logo.png" alt="Athlas" style="height:30px;width:auto;" />
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;color:#f2f1f8;">Agent<span style="color:#7d9bff;">Ops</span></span>
+      </div>
+      <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#6f6c85;max-width:52ch;text-align:right;">Código-fonte em evolução para builders. O humano continua no controle: você aprova PRs, homologações e decisões críticas.</p>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // ----- FAQ accordion -----
+  document.querySelectorAll('#faq-list .faq-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var item = btn.closest('.faq-item');
+      var isOpen = item.classList.contains('open');
+      document.querySelectorAll('#faq-list .faq-item').forEach(function (el) { el.classList.remove('open'); });
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // ----- Contagem regressiva da oferta de fundador -----
+  // ⚠️ Ajuste DEADLINE para a data/hora REAL do fim da oferta (fuso -03:00 = Brasília).
+  (function () {
+    var DEADLINE = '2026-07-07T23:59:59-03:00';
+    var el = document.getElementById('countdown');
+    if (!el) return;
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function tick() {
+      var diff = new Date(DEADLINE) - new Date();
+      if (diff <= 0) { el.textContent = 'oferta encerrada'; return; }
+      var d = Math.floor(diff / 86400000);
+      var h = Math.floor(diff / 3600000) % 24;
+      var m = Math.floor(diff / 60000) % 60;
+      var s = Math.floor(diff / 1000) % 60;
+      el.textContent = (d > 0 ? d + 'd ' : '') + pad(h) + ':' + pad(m) + ':' + pad(s);
+      setTimeout(tick, 1000);
+    }
+    tick();
+  })();
+</script>
+
+</body>
+</html>
