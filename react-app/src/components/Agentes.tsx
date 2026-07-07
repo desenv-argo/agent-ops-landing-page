@@ -1,0 +1,22 @@
+export function Agentes() {
+  return (
+    <section style={{ position: 'relative', padding: 'clamp(64px,9vw,120px) clamp(20px,4vw,48px)' }}>
+      <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '20px', justifyContent: 'space-between', flexWrap: 'wrap', marginBottom: '42px' }}>
+          <div>
+            <p style={{ margin: '0 0 14px', fontFamily: "'JetBrains Mono', monospace", fontSize: '13px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#7d9bff' }}>A equipe</p>
+            <h2 style={{ margin: 0, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 'clamp(28px,4vw,44px)', lineHeight: '1.1', letterSpacing: '-0.02em', color: '#f2f1f8', maxWidth: '18ch' }}>Cinco agentes especializados, um por fase</h2>
+          </div>
+          <img src="/assets/athlas-sherlock.png" alt="Athlas investiga" style={{ height: '120px', width: 'auto', filter: 'drop-shadow(0 12px 30px rgba(91,140,255,.45))', animation: 'floaty 6s ease-in-out infinite' }} />
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '16px' }}>
+          <div style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)', background: 'linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015))', display: 'flex', flexDirection: 'column', gap: '10px' }}><h3 style={{ margin: 0, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: '17px', background: 'linear-gradient(110deg,#aebdff,#c9a6ff)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>PM Agent</h3><p style={{ margin: 0, fontSize: '14.5px', lineHeight: '1.55', color: '#a09db5' }}>Analisa a demanda: user story, critérios de aceite, riscos e próximos passos.</p></div>
+          <div style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)', background: 'linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015))', display: 'flex', flexDirection: 'column', gap: '10px' }}><h3 style={{ margin: 0, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: '17px', background: 'linear-gradient(110deg,#aebdff,#c9a6ff)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>Architect Agent</h3><p style={{ margin: 0, fontSize: '14.5px', lineHeight: '1.55', color: '#a09db5' }}>Define a solução técnica, arquivos, padrões e dependências.</p></div>
+          <div style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)', background: 'linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015))', display: 'flex', flexDirection: 'column', gap: '10px' }}><h3 style={{ margin: 0, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: '17px', background: 'linear-gradient(110deg,#aebdff,#c9a6ff)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>Software Engineer</h3><p style={{ margin: 0, fontSize: '14.5px', lineHeight: '1.55', color: '#a09db5' }}>Implementa o código em um workspace isolado e seguro.</p></div>
+          <div style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)', background: 'linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015))', display: 'flex', flexDirection: 'column', gap: '10px' }}><h3 style={{ margin: 0, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: '17px', background: 'linear-gradient(110deg,#aebdff,#c9a6ff)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>QA Agent</h3><p style={{ margin: 0, fontSize: '14.5px', lineHeight: '1.55', color: '#a09db5' }}>Roda os testes e valida os critérios de aceite.</p></div>
+          <div style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)', background: 'linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015))', display: 'flex', flexDirection: 'column', gap: '10px' }}><h3 style={{ margin: 0, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: '17px', background: 'linear-gradient(110deg,#aebdff,#c9a6ff)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>Principal Review</h3><p style={{ margin: 0, fontSize: '14.5px', lineHeight: '1.55', color: '#a09db5' }}>Revisão técnica e de riscos antes de alterar o código.</p></div>
+        </div>
+      </div>
+    </section>
+  );
+}
