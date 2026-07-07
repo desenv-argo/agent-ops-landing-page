@@ -1,0 +1,23 @@
+/* ---- Reset & base (portado da landing original) ---- */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: #08070f;
+  color: #f2f1f8;
+  font-family: 'IBM Plex Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ---- Keyframes ---- */
+@keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes pulseGlow { 0%,100% { opacity: .35; } 50% { opacity: .85; } }
+@keyframes flowline { to { background-position: -200% 0; } }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .15; } }
+
+/* Respeita usuários que preferem menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+}
