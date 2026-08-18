@@ -6,7 +6,10 @@ export function Footer() {
           <img src="/assets/athlas-logo.png" alt="Athlas" style={{ height: '30px', width: 'auto' }} />
           <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: '17px', color: '#f2f1f8' }}>Agent<span style={{ color: '#7d9bff' }}>Ops</span></span>
         </div>
-        <p style={{ margin: 0, fontFamily: "'JetBrains Mono', monospace", fontSize: '12.5px', color: '#6f6c85', maxWidth: '52ch', textAlign: 'right' }}>Código-fonte em evolução para builders. O humano continua no controle: você aprova PRs, homologações e decisões críticas.</p>
+        <div style={{ maxWidth: '58ch', textAlign: 'right' }}>
+          <p style={{ margin: '0 0 8px', fontFamily: "'JetBrains Mono', monospace", fontSize: '12.5px', color: '#6f6c85' }}>Código-fonte em evolução para builders. O humano continua no controle: você aprova PRs, homologações e decisões críticas.</p>
+          <p style={{ margin: 0, fontFamily: "'JetBrains Mono', monospace", fontSize: '11.5px', color: '#565369' }}>© 2026 Argo Tecnologia. Todos os direitos reservados.</p>
+        </div>
       </div>
     </footer>
   );

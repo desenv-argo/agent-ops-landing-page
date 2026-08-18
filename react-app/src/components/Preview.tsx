@@ -8,7 +8,7 @@ export function Preview() {
           <p style={{ margin: 0, fontSize: '16px', color: '#a09db5', maxWidth: '56ch', marginLeft: 'auto', marginRight: 'auto' }}>Dashboard, Kanban por fases, escritório de agentes, catálogo de modelos — tudo isso já existe no código que você recebe.</p>
         </div>
 
-        {/* VÍDEO-DEMO — placeholder clicável até haver um vídeo real */}
+        {/* Vídeo-demo otimizado para reprodução direta na landing. */}
         <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', background: '#12101e', boxShadow: '0 44px 110px -45px rgba(91,140,255,0.6)', marginBottom: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '11px 16px', borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
             <span style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#ff6058' }}></span>
@@ -16,13 +16,17 @@ export function Preview() {
             <span style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#28c840' }}></span>
             <span style={{ marginLeft: '12px', fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: '#8d8aa3' }}>agentops · Demonstração — uma demanda vira um Pull Request</span>
           </div>
-          <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%', background: 'radial-gradient(ellipse at 50% 40%, rgba(91,140,255,0.18), transparent 60%), #0a0913' }}>
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '14px', textAlign: 'center', padding: '20px' }}>
-              <span style={{ width: '74px', height: '74px', borderRadius: '50%', background: 'linear-gradient(135deg,#5b8cff,#a06bff)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 16px 40px -10px rgba(120,110,255,0.85)' }}><span style={{ marginLeft: '5px', borderLeft: '22px solid #fff', borderTop: '14px solid transparent', borderBottom: '14px solid transparent' }}></span></span>
-              <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 'clamp(16px,2.4vw,20px)', color: '#f2f1f8' }}>Veja o AgentOps rodando de verdade</span>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: '#8d8aa3' }}>[ placeholder — insira aqui o vídeo-demo de 60-120s ]</span>
-            </div>
-          </div>
+          <video
+            controls
+            playsInline
+            preload="metadata"
+            poster="/assets/agentops-demo-poster.jpg"
+            aria-label="Demonstração do AgentOps transformando uma demanda em um Pull Request"
+            style={{ display: 'block', width: '100%', aspectRatio: '16 / 9', background: '#0a0913' }}
+          >
+            <source src="/assets/agentops-demo.mp4" type="video/mp4" />
+            Seu navegador não oferece suporte à reprodução de vídeo.
+          </video>
         </div>
 
         {/* featured screenshot */}
