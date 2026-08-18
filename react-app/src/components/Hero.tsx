@@ -1,10 +1,10 @@
-import { PRICE_NOW } from '../config'
+import { HERO_BACKGROUND_VIDEO_VERSION, PRICE_NOW } from '../config'
 
 export function Hero() {
   return (
     <section id="heroB" style={{ position: 'relative', overflow: 'hidden', padding: 'clamp(56px,7vw,96px) clamp(20px,4vw,48px)' }}>
       <video autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.14, pointerEvents: 'none' }}>
-        <source src="/assets/argo-agentes.mp4" type="video/mp4" />
+        <source src={`/assets/argo-agentes.mp4?v=${HERO_BACKGROUND_VIDEO_VERSION}`} type="video/mp4" />
       </video>
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(8,7,15,0.6), rgba(8,7,15,0.94))', pointerEvents: 'none' }}></div>
 
