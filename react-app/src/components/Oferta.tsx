@@ -21,7 +21,7 @@ export function Oferta() {
                 <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '13px', color: '#6f6c85' }}>acesso founder</span>
               </div>
               <a href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center', marginTop: '26px', textDecoration: 'none', padding: '17px 30px', borderRadius: '13px', background: 'linear-gradient(135deg,#5b8cff,#a06bff)', color: '#fff', fontWeight: 600, fontSize: '16.5px', boxShadow: '0 16px 40px -12px rgba(120,110,255,0.85)' }}>Quero comprar o código-fonte</a>
-              <a href="#comunidade" style={{ display: 'block', textAlign: 'center', marginTop: '12px', fontFamily: "'JetBrains Mono',monospace", fontSize: '12.5px', color: '#aebdff', textDecoration: 'none' }}>+ acesso à comunidade de builders</a>
+              <p style={{ margin: '12px 0 0', textAlign: 'center', fontFamily: "'JetBrains Mono',monospace", fontSize: '12.5px', color: '#aebdff' }}>+ acesso à comunidade de builders</p>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '14px', fontFamily: "'JetBrains Mono',monospace", fontSize: '12px', color: '#8d8aa3' }}><span style={{ color: '#5be0a0' }}>✓</span> 7 dias de garantia · pagamento único · acesso imediato</div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '13px' }}>
