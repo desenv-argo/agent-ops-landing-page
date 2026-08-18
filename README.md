@@ -98,31 +98,27 @@ Após o deploy, aponte seu domínio (ex.: `agentops.seudominio.com`) nas configu
 
 ### Conteúdo e copy
 
-Edite diretamente o `index.html`. As seções têm o atributo `data-screen-label` para facilitar a localização (ex.: `Hero B`, `Oferta`, `FAQ`).
+Edite os componentes em `react-app/src/components/`. As configurações centrais da oferta ficam em `react-app/src/config.ts`.
 
 ### Checkout / link de compra
 
-O botão de compra aponta para a Kiwify. Troque a URL em `#oferta`:
+O botão de compra aponta para a Kiwify. Atualize a constante em `react-app/src/config.ts`:
 
-```html
-<a href="https://pay.kiwify.com.br/SEU_LINK" ...>
+```ts
+export const CHECKOUT_URL = 'https://pay.kiwify.com.br/jL4ieR0'
 ```
 
 ### Contagem regressiva
 
-No final do `index.html`, ajuste a data da oferta:
+Em `react-app/src/config.ts`, ajuste a data da oferta:
 
 ```javascript
 export const DEADLINE = '2026-08-31T23:59:59-03:00'
 ```
 
-### Analytics
-
-Há um bloco comentado no `<head>` do `index.html` para colar GA4, Meta Pixel ou outro script de rastreamento.
-
 ### Vídeo de demo
 
-Substitua `SEU_VIDEO_ID` no iframe da seção Preview pelo ID do YouTube, ou troque por um `<video>` local apontando para `assets/demo.mp4`.
+O vídeo exibido na seção Preview fica em `react-app/public/assets/agentops-demo.mp4`. O poster usado antes da reprodução fica em `react-app/public/assets/agentops-demo-poster.jpg`.
 
 ### Variante Hero A vs B
 
@@ -137,6 +133,8 @@ assets/
 ├── athlas-logo.png
 ├── athlas-sherlock.png
 ├── athlas-cheer.png
+├── agentops-demo.mp4
+├── agentops-demo-poster.jpg
 ├── argo-agentes.mp4          # vídeo de fundo do hero
 └── screens/
     ├── dashboard.png
