@@ -1,3 +1,5 @@
+import { HERO_BACKGROUND_VIDEO_VERSION } from '../config'
+
 export function Preview() {
   return (
     <section style={{ position: 'relative', padding: 'clamp(56px,8vw,100px) clamp(20px,4vw,48px)' }}>
@@ -20,11 +22,10 @@ export function Preview() {
             controls
             playsInline
             preload="metadata"
-            poster="/assets/agentops-demo-poster.jpg"
             aria-label="Demonstração do AgentOps transformando uma demanda em um Pull Request"
             style={{ display: 'block', width: '100%', aspectRatio: '16 / 9', background: '#0a0913' }}
           >
-            <source src="/assets/agentops-demo.mp4" type="video/mp4" />
+            <source src={`/assets/argo-agentes.mp4?v=${HERO_BACKGROUND_VIDEO_VERSION}`} type="video/mp4" />
             Seu navegador não oferece suporte à reprodução de vídeo.
           </video>
         </div>
