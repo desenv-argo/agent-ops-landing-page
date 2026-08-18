@@ -113,7 +113,7 @@ O botão de compra aponta para a Kiwify. Troque a URL em `#oferta`:
 No final do `index.html`, ajuste a data da oferta:
 
 ```javascript
-var DEADLINE = '2026-07-07T23:59:59-03:00';
+export const DEADLINE = '2026-08-31T23:59:59-03:00'
 ```
 
 ### Analytics

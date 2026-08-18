@@ -1,4 +1,4 @@
-import { CHECKOUT_URL } from '../config'
+import { CHECKOUT_URL, DISCOUNT_LABEL, PRICE_FROM, PRICE_NOW } from '../config'
 
 export function Oferta() {
   return (
@@ -13,11 +13,11 @@ export function Oferta() {
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(90deg,#5b8cff,#a06bff)' }}></div>
           <div style={{ padding: 'clamp(28px,5vw,52px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: '36px', alignItems: 'center' }}>
             <div>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '999px', background: 'rgba(91,140,255,0.14)', border: '1px solid rgba(125,155,255,0.3)', fontFamily: "'JetBrains Mono',monospace", fontSize: '12px', color: '#aebdff' }}>Oferta de lançamento <span style={{ padding: '2px 8px', borderRadius: '999px', background: 'linear-gradient(135deg,#5b8cff,#a06bff)', color: '#fff', fontWeight: 700 }}>−60%</span></span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '999px', background: 'rgba(91,140,255,0.14)', border: '1px solid rgba(125,155,255,0.3)', fontFamily: "'JetBrains Mono',monospace", fontSize: '12px', color: '#aebdff' }}>Oferta de lançamento <span style={{ padding: '2px 8px', borderRadius: '999px', background: 'linear-gradient(135deg,#5b8cff,#a06bff)', color: '#fff', fontWeight: 700 }}>{DISCOUNT_LABEL}</span></span>
               <p style={{ margin: '18px 0 8px', fontSize: '15px', color: '#a09db5' }}>Garanta seu acesso pelo preço de fundador, com <strong style={{ color: '#cfcddd' }}>60% de desconto</strong> no lançamento.</p>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: 'clamp(20px,3vw,26px)', color: '#6f6c85', textDecoration: 'line-through' }}>R$997</span>
-                <span style={{ fontFamily: "'Space Grotesk',sans-serif", fontWeight: 700, fontSize: 'clamp(44px,7vw,68px)', lineHeight: 1, background: 'linear-gradient(110deg,#5b8cff,#a06bff)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>R$397</span>
+                <span style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: 'clamp(20px,3vw,26px)', color: '#6f6c85', textDecoration: 'line-through' }}>{PRICE_FROM}</span>
+                <span style={{ fontFamily: "'Space Grotesk',sans-serif", fontWeight: 700, fontSize: 'clamp(44px,7vw,68px)', lineHeight: 1, background: 'linear-gradient(110deg,#5b8cff,#a06bff)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>{PRICE_NOW}</span>
                 <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '13px', color: '#6f6c85' }}>acesso founder</span>
               </div>
               <a href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center', marginTop: '26px', textDecoration: 'none', padding: '17px 30px', borderRadius: '13px', background: 'linear-gradient(135deg,#5b8cff,#a06bff)', color: '#fff', fontWeight: 600, fontSize: '16.5px', boxShadow: '0 16px 40px -12px rgba(120,110,255,0.85)' }}>Quero comprar o código-fonte</a>

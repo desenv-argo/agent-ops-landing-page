@@ -1,5 +1,5 @@
 import { useCountdown } from '../hooks/useCountdown'
-import { DEADLINE } from '../config'
+import { DEADLINE, DISCOUNT_LABEL, PRICE_FROM, PRICE_NOW } from '../config'
 
 export function Urgencia() {
   const countdown = useCountdown(DEADLINE)
@@ -13,11 +13,11 @@ export function Urgencia() {
         <p style={{ margin: 0, fontSize: 'clamp(16px,2vw,20px)', lineHeight: 1.6, color: '#b6b3c9', maxWidth: '60ch', marginLeft: 'auto', marginRight: 'auto' }}>Enquanto a maioria ainda usa IA como chat, builders já estão criando fluxos, agentes, pipelines e produtos inteiros em cima de código existente.</p>
 
         <div style={{ margin: '36px auto 0', display: 'inline-flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '18px', padding: '18px 28px', borderRadius: '16px', border: '1px solid rgba(160,107,255,0.3)', background: 'rgba(160,107,255,0.08)' }}>
-          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '13.5px', color: '#cfcddd' }}>Preço de fundador (−60%) encerra em</span>
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '13.5px', color: '#cfcddd' }}>Preço de fundador ({DISCOUNT_LABEL}) encerra em</span>
           <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 'clamp(18px,3vw,24px)', letterSpacing: '0.04em', color: '#fff' }}>{countdown}</span>
         </div>
-        <p style={{ margin: '14px 0 28px', fontFamily: "'JetBrains Mono',monospace", fontSize: '12.5px', color: '#8d8aa3' }}>Depois disso, o valor volta para R$997.</p>
-        <a href="#oferta" style={{ display: 'inline-block', textDecoration: 'none', padding: '16px 32px', borderRadius: '13px', background: 'linear-gradient(135deg,#5b8cff,#a06bff)', color: '#fff', fontWeight: 600, fontSize: '16px', boxShadow: '0 14px 38px -10px rgba(120,110,255,0.8)' }}>Garantir meu acesso por R$397</a>
+        <p style={{ margin: '14px 0 28px', fontFamily: "'JetBrains Mono',monospace", fontSize: '12.5px', color: '#8d8aa3' }}>Depois disso, o valor volta para {PRICE_FROM}.</p>
+        <a href="#oferta" style={{ display: 'inline-block', textDecoration: 'none', padding: '16px 32px', borderRadius: '13px', background: 'linear-gradient(135deg,#5b8cff,#a06bff)', color: '#fff', fontWeight: 600, fontSize: '16px', boxShadow: '0 14px 38px -10px rgba(120,110,255,0.8)' }}>Garantir meu acesso por {PRICE_NOW}</a>
       </div>
     </section>
   )

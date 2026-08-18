@@ -1,3 +1,5 @@
+import { PRICE_NOW } from '../config'
+
 export function Hero() {
   return (
     <section id="heroB" style={{ position: 'relative', overflow: 'hidden', padding: 'clamp(56px,7vw,96px) clamp(20px,4vw,48px)' }}>
@@ -19,7 +21,7 @@ export function Hero() {
             Você recebe o <strong style={{ color: '#e2e1ee' }}>código-fonte completo</strong> de uma plataforma que recebe demandas, aciona agentes (PM, arquiteto, dev, QA) e entrega Pull Requests prontos pra sua revisão. Pronto pra estudar, customizar, vender ou virar seu próprio produto.
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', marginTop: '4px' }}>
-            <a href="#oferta" style={{ textDecoration: 'none', padding: '16px 30px', borderRadius: '13px', background: 'linear-gradient(135deg,#5b8cff,#a06bff)', color: '#fff', fontWeight: 600, fontSize: '16px', boxShadow: '0 14px 38px -10px rgba(120,110,255,0.8)' }}>Quero o código-fonte — R$397</a>
+            <a href="#oferta" style={{ textDecoration: 'none', padding: '16px 30px', borderRadius: '13px', background: 'linear-gradient(135deg,#5b8cff,#a06bff)', color: '#fff', fontWeight: 600, fontSize: '16px', boxShadow: '0 14px 38px -10px rgba(120,110,255,0.8)' }}>Quero o código-fonte — {PRICE_NOW}</a>
             <a href="#como" style={{ textDecoration: 'none', padding: '16px 30px', borderRadius: '13px', border: '1px solid rgba(255,255,255,0.18)', background: 'rgba(255,255,255,0.04)', color: '#e8e7f2', fontWeight: 600, fontSize: '16px' }}>Ver como funciona</a>
           </div>
           <p style={{ margin: '2px 0 0', fontFamily: "'JetBrains Mono',monospace", fontSize: '12.5px', color: '#8d8aa3' }}><span style={{ color: '#5be0a0' }}>✓</span> 7 dias de garantia &nbsp;·&nbsp; <span style={{ color: '#5be0a0' }}>✓</span> Pagamento único &nbsp;·&nbsp; <span style={{ color: '#5be0a0' }}>✓</span> Acesso imediato</p>
