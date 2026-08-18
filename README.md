@@ -6,6 +6,8 @@ Landing page estática de vendas do **AgentOps**: plataforma que conecta ao seu 
 
 **Repositório:** [github.com/desenv-argo/agent-ops-landing-page](https://github.com/desenv-argo/agent-ops-landing-page)
 
+**LandingPage:** [https://www.agentops.argo.app.br/](https://www.agentops.argo.app.br/)
+
 ---
 
 ## Sobre o AgentOps
